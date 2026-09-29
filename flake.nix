@@ -25,6 +25,18 @@
       });
 
       devShells = forAllSystems (pkgs: {
+        updateShell = pkgs.mkShell {
+          packages = [
+            pkgs.nodejs_latest
+            pkgs.jq
+          ];
+          shellHook = ''
+              echo ${self.packages.${pkgs.stdenv.hostPlatform.system}.default}
+              echo "✅ 'copilot' command is now available."
+              echo "✅ 'copilot-hr' (copilot wrapped with Headroom) is now available."
+          '';
+          NIX_SHELL_PRESERVE_ENVIRONMENT = [ "HOME" ];
+        };
         default = pkgs.mkShell {
           packages = [ self.packages.${pkgs.stdenv.hostPlatform.system}.default ];
         };
